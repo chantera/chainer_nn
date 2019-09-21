@@ -81,3 +81,82 @@ class CharCNN(chainer.link.Chain):
                            self.out_size)
         ys = F.max(C - mask, axis=1)
         return ys
+
+
+class ContextualizedEmbeddings(chainer.Chain):
+
+    def __init__(self, n_layers, dim, usage='weighted_sum'):
+        super().__init__()
+        with self.init_scope():
+            self._build(n_layers, dim, usage)
+
+    def _build(self, n_layers, dim, usage):
+        self._out_size = dim
+        if usage == 'weighted_sum':
+            self.linear = chainer.links.Linear(
+                n_layers, 1, initialW=chainer.initializers.GlorotNormal())
+            self._forward_one = self._forward_weighted_sum
+        elif usage == 'top':
+            self._forward_one = self._forward_top
+        elif usage == 'mean':
+            self._forward_one = self._forward_mean
+        else:
+            raise ValueError("invalid embeddings usage: {}".format(usage))
+
+    def forward(self, xs):
+        return [self.forward_one(x) for x in xs]
+
+    def forward_one(self, x):
+        return self._forward_one(x)
+
+    def _forward_weighted_sum(self, x):
+        return F.squeeze(self.linear(
+            self.xp.asarray(x.transpose(1, 2, 0)), n_batch_axes=2), 2)
+
+    def _forward_top(self, x):
+        return self.xp.asarray(x[-1])
+
+    def _forward_mean(self, x):
+        return F.mean(self.xp.asarray(x), axis=0)
+
+    @property
+    def out_size(self):
+        return self._out_size
+
+
+class ElmoEmbeddings(ContextualizedEmbeddings):
+
+    def __init__(self, n_layers=3, dim=1024, usage='weighted_sum'):
+        super().__init__(n_layers, dim, usage)
+
+
+class BertEmbeddings(ContextualizedEmbeddings):
+    """
+    x is a list of embeddings for one sentence taken from the last 4 layers of
+    the BERT- model in last to fourth-to-last order.
+    """
+
+    def _build(self, n_layers, dim, usage):
+        if usage == 'second_to_last':
+            self._forward_one = self._forward_second_to_last
+            self._out_size = dim
+        else:
+            super()._build(n_layers, dim, usage)
+
+    def _forward_second_to_last(self, x):
+        return self.xp.asarray(x[1])
+
+    def _forward_top(self, x):
+        return self.xp.asarray(x[0])
+
+
+class BertBaseEmbeddings(BertEmbeddings):
+
+    def __init__(self, n_layers=4, dim=768, usage='second_to_last'):
+        super().__init__(n_layers, dim, usage)
+
+
+class BertLargeEmbeddings(BertEmbeddings):
+
+    def __init__(self, n_layers=4, dim=1024, usage='second_to_last'):
+        super().__init__(n_layers, dim, usage)
