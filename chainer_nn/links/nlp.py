@@ -83,7 +83,7 @@ class CharCNN(chainer.link.Chain):
         return ys
 
 
-class ContextualizedEmbeddings(chainer.Chain):
+class ContextualizedEmbedding(chainer.Chain):
 
     def __init__(self, n_layers, dim, usage='weighted_sum'):
         super().__init__()
@@ -124,13 +124,13 @@ class ContextualizedEmbeddings(chainer.Chain):
         return self._out_size
 
 
-class ElmoEmbeddings(ContextualizedEmbeddings):
+class ElmoEmbedding(ContextualizedEmbedding):
 
     def __init__(self, n_layers=3, dim=1024, usage='weighted_sum'):
         super().__init__(n_layers, dim, usage)
 
 
-class BertEmbeddings(ContextualizedEmbeddings):
+class BertEmbedding(ContextualizedEmbedding):
     """
     x is a list of embeddings for one sentence taken from the last 4 layers of
     the BERT- model in last to fourth-to-last order.
@@ -150,13 +150,13 @@ class BertEmbeddings(ContextualizedEmbeddings):
         return self.xp.asarray(x[0])
 
 
-class BertBaseEmbeddings(BertEmbeddings):
+class BertBaseEmbedding(BertEmbedding):
 
     def __init__(self, n_layers=4, dim=768, usage='second_to_last'):
         super().__init__(n_layers, dim, usage)
 
 
-class BertLargeEmbeddings(BertEmbeddings):
+class BertLargeEmbedding(BertEmbedding):
 
     def __init__(self, n_layers=4, dim=1024, usage='second_to_last'):
         super().__init__(n_layers, dim, usage)

@@ -3,12 +3,12 @@ from chainer_nn.links.connection import EmbedList  # NOQA
 from chainer_nn.links.connection import MLP  # NOQA
 from chainer_nn.links.connection import Biaffine  # NOQA
 from chainer_nn.links.loss import CRF1d  # NOQA
-from chainer_nn.links.nlp import BertBaseEmbeddings  # NOQA
-from chainer_nn.links.nlp import BertEmbeddings  # NOQA
-from chainer_nn.links.nlp import BertLargeEmbeddings  # NOQA
+from chainer_nn.links.nlp import BertBaseEmbedding  # NOQA
+from chainer_nn.links.nlp import BertEmbedding  # NOQA
+from chainer_nn.links.nlp import BertLargeEmbedding  # NOQA
 from chainer_nn.links.nlp import CharCNN  # NOQA
 from chainer_nn.links.nlp import CharLSTM  # NOQA
-from chainer_nn.links.nlp import ContextualizedEmbeddings  # NOQA
-from chainer_nn.links.nlp import ElmoEmbeddings  # NOQA
+from chainer_nn.links.nlp import ContextualizedEmbedding  # NOQA
+from chainer_nn.links.nlp import ElmoEmbedding  # NOQA
 from chainer_nn.links.rnn import NStepBiLSTM  # NOQA
 from chainer_nn.links.rnn import NStepLSTM  # NOQA
