@@ -1,7 +1,7 @@
 import chainer
 import chainer.functions as F
-from chainer.links.connection.n_step_rnn import argsort_list_descent
-from chainer.links.connection.n_step_rnn import permutate_list
+from chainer.links.rnn.n_step_rnn import argsort_list_descent
+from chainer.links.rnn.n_step_rnn import permutate_list
 
 
 class CRF1d(chainer.link.Link):

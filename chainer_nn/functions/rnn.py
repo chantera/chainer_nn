@@ -112,7 +112,7 @@ def _n_step_lstm_base(
     if chainer.configuration.config.train and recurrent_dropout_ratio > 0.0:
         if use_variational_dropout:
             return _n_step_rnn_impl(
-                F.connection.n_step_lstm._lstm,
+                F.rnn.n_step_lstm._lstm,
                 n_layers, dropout_ratio, hx, cx, ws, bs, xs, use_bi_direction,
                 recurrent_dropout_ratio, use_variational_dropout)
         else:  # drop connect
@@ -124,7 +124,7 @@ def _n_step_lstm_base(
                 F.concat(r_ws), recurrent_dropout_ratio), len(r_ws), axis=1)
             for i in range(len(ws)):
                 ws[i][4:] = r_ws[4 * i: 4 * (i + 1)]
-    return F.connection.n_step_lstm.n_step_lstm_base(
+    return F.rnn.n_step_lstm.n_step_lstm_base(
         n_layers, dropout_ratio, hx, cx, ws, bs, xs, use_bi_direction,
         **kwargs)
 

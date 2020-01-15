@@ -3,7 +3,7 @@ import chainer
 from chainer_nn.functions import rnn
 
 
-class NStepRNNBase(chainer.links.connection.n_step_rnn.NStepRNNBase):
+class NStepRNNBase(chainer.links.rnn.n_step_rnn.NStepRNNBase):
 
     def __init__(self, n_layers, in_size, out_size, dropout,
                  recurrent_dropout=0.0, use_variational_dropout=False,
